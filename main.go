@@ -91,7 +91,7 @@ func run(c *cli.Context) error {
 				continue
 			}
 		case "ip6", "ipv6":
-			if ip.To16() == nil {
+			if ip.To4() != nil {
 				continue
 			}
 		}
