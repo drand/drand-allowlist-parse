@@ -32,6 +32,11 @@ be easily re-used.`,
 				Usage: "list every individual IPs instead of CIDRs",
 			},
 			&cli.StringFlag{
+				Name:  "type",
+				Usage: "IP type to produce the list for [ip4, ip6]",
+				Value: "ip4",
+			},
+			&cli.StringFlag{
 				Name:  "format",
 				Value: "csv",
 				Usage: "format the list as: [csv, text, json]",
@@ -57,6 +62,7 @@ func run(c *cli.Context) error {
 	ipnets := []*net.IPNet{}
 	lineNumber := 0
 	scanner := bufio.NewScanner(f)
+	ipType := c.String("type")
 
 	// Read every line.
 	for scanner.Scan() {
@@ -77,6 +83,17 @@ func run(c *cli.Context) error {
 			msg := fmt.Sprintf("%s:%d: error parsing CIDR: %s",
 				filename, lineNumber, err)
 			return cli.Exit(msg, 1)
+		}
+
+		switch ipType {
+		case "ip4":
+			if ip.To4() == nil {
+				continue
+			}
+		case "ip6":
+			if ip.To16() == nil {
+				continue
+			}
 		}
 
 		// We only accept network addresses (i.e. 192.168.3.0/24 is
