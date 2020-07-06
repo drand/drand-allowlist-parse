@@ -62,7 +62,7 @@ func run(c *cli.Context) error {
 	ipnets := []*net.IPNet{}
 	lineNumber := 0
 	scanner := bufio.NewScanner(f)
-	ipType := c.String("type")
+	ipType := strings.ToLower(c.String("type"))
 
 	// Read every line.
 	for scanner.Scan() {
@@ -86,11 +86,11 @@ func run(c *cli.Context) error {
 		}
 
 		switch ipType {
-		case "ip4":
+		case "ip4", "ipv4":
 			if ip.To4() == nil {
 				continue
 			}
-		case "ip6":
+		case "ip6", "ipv6":
 			if ip.To16() == nil {
 				continue
 			}
