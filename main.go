@@ -74,8 +74,8 @@ func run(c *cli.Context) error {
 		// Parse the CIDR
 		ip, ipnet, err := net.ParseCIDR(line)
 		if err != nil {
-			msg := fmt.Sprintf("%s:%d: Error parsing CIDR (%s): %s",
-				filename, lineNumber, line, err)
+			msg := fmt.Sprintf("%s:%d: error parsing CIDR: %s",
+				filename, lineNumber, err)
 			return cli.Exit(msg, 1)
 		}
 
@@ -153,14 +153,14 @@ func incIP(ip net.IP) {
 }
 
 func formatCSV(results []string) {
-	fmt.Println(strings.Join(results, ","))
+	fmt.Printf("%s", strings.Join(results, ","))
 }
 
 func formatText(results []string) {
-	fmt.Println(strings.Join(results, "\n"))
+	fmt.Printf("%s", strings.Join(results, "\n"))
 }
 
 func formatJSON(results []string) {
 	j, _ := json.Marshal(results)
-	fmt.Println(string(j))
+	fmt.Printf("%s", string(j))
 }
